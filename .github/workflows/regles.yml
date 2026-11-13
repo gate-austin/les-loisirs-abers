@@ -1,0 +1,29 @@
+name: Installer les règles de la base
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - regles-base-de-donnees.json
+
+jobs:
+  regles:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Installer
+        working-directory: robot
+        run: npm install --omit=dev --no-audit --no-fund
+
+      - name: Envoyer les règles à Firebase
+        working-directory: robot
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          DATABASE_URL: https://les-loisirs-abers-default-rtdb.europe-west1.firebasedatabase.app
+        run: node regles.js
