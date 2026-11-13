@@ -231,7 +231,7 @@ function vue() {
   }
   if (!D('joueurs')[S.moiId] && S.data.joueurs) { return vueCodeEquipe(); }
   const [route, param] = (location.hash.slice(1) || 'accueil').split('/');
-  const pages = { accueil: vueAccueil, matchs: vueMatchs, match: () => vueMatch(param), journees: vueJournees, cagnotte: vueCagnotte, salles: vueSalles, admin: vueAdmin, aide: vueAide };
+  const pages = { accueil: vueAccueil, matchs: vueMatchs, match: () => vueMatch(param), journees: vueJournees, cagnotte: vueCagnotte, salles: vueSalles, admin: vueAdmin, aide: vueAide, compte: vueCompte };
   return bandeau() + `<main class="contenu">${(pages[route] || vueAccueil)()}</main>` + onglets(route);
 }
 
@@ -313,7 +313,23 @@ function vueAccueil() {
   }
   const d = dernierMatch();
   if (d) h += blocScore(d, true);
+  h += `<a href="#compte" class="petit" style="text-align:center;padding:8px">Connecté en tant que <b>${esc(moi().nom || '')}</b> · Mon compte</a>`;
   return h;
+}
+
+// ----- Mon compte -----
+function vueCompte() {
+  return `<h1 class="page">Mon compte</h1>
+  <div class="carte"><div class="pad"><span class="petit">Connecté en tant que</span><span class="affiche" style="font-size:24px">${esc(moi().nom || '')}</span></div></div>
+  <form class="carte" data-form="mon-code"><div class="pad">
+    <span class="fort">Changer mon code joueur</span>
+    <div class="champ"><label for="mc-1" style="font-weight:400">Nouveau code (4 caractères minimum)</label><input id="mc-1" name="code" required minlength="4" inputmode="numeric" autocomplete="off"></div>
+    <div class="champ"><label for="mc-2" style="font-weight:400">Confirme le nouveau code</label><input id="mc-2" name="confirmation" required minlength="4" inputmode="numeric" autocomplete="off"></div>
+    <span class="petit">Ce téléphone reste connecté. Sur un autre appareil, il faudra retaper le nouveau code.</span>
+    <button class="btn" type="submit">Enregistrer mon nouveau code</button>
+  </div></form>
+  ${aideInstallation()}
+  <button class="btn neutre" data-action="deconnexion">Déconnecter ce téléphone</button>`;
 }
 
 // ----- Bloc « match » (accueil et page détail) -----
@@ -756,6 +772,16 @@ const formulaires = {
       await update(ref(db), { [`joueurs/${jid}/nom`]: v.nom.trim(), [`joueurs/${jid}/roles`]: Object.keys(roles).length ? roles : null, [`secret/codes/${jid}`]: v.code.trim() });
       S.ui.editJoueur = null; S.ui.ajoutJoueur = false;
     }, 'Joueur enregistré');
+  },
+  async 'mon-code'(f) {
+    const v = Object.fromEntries(new FormData(f));
+    const code = v.code.trim();
+    if (code.length < 4) return toast('Le code doit faire au moins 4 caractères.');
+    if (code !== v.confirmation.trim()) return toast('Les deux codes ne sont pas identiques.');
+    await essai(async () => {
+      await update(ref(db), { [`secret/codes/${S.moiId}`]: code, [`liens/${S.uid}/code`]: code });
+      f.reset();
+    }, 'Nouveau code enregistré');
   },
   async reglages(f) {
     const v = Object.fromEntries(new FormData(f));

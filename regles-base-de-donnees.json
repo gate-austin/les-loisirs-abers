@@ -6,7 +6,13 @@
     },
     "secret": {
       ".read": "((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/admin').val() === true)",
-      ".write": "!root.child('etat/initialise').exists() || ((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/admin').val() === true)"
+      ".write": "!root.child('etat/initialise').exists() || ((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/admin').val() === true)",
+      "codes": {
+        "$j": {
+          ".write": "(auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && $j === root.child('liens/'+auth.uid+'/joueur').val()",
+          ".validate": "newData.isString() && newData.val().length >= 4"
+        }
+      }
     },
     "tentatives": {
       "$uid": {
@@ -20,7 +26,7 @@
       "$uid": {
         ".read": "auth != null && auth.uid === $uid",
         ".write": "auth != null && auth.uid === $uid",
-        ".validate": "newData.child('equipe').val() === newData.parent().parent().child('secret/codeEquipe').val() && newData.child('code').val() === newData.parent().parent().child('secret/codes/'+newData.child('joueur').val()).val()"
+        ".validate": "(data.exists() || newData.child('equipe').val() === newData.parent().parent().child('secret/codeEquipe').val()) && newData.child('code').val() === newData.parent().parent().child('secret/codes/'+newData.child('joueur').val()).val()"
       }
     },
     "joueurs": {
