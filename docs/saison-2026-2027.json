@@ -1,0 +1,965 @@
+{
+ "meta": {
+  "nom": "2026/2027",
+  "equipe": "Les Abers",
+  "rdvDefaut": "20:15"
+ },
+ "journees": [
+  {
+   "date": "2026-09-17",
+   "phase": "aller",
+   "rencontres": [
+    {
+     "dom": "Pilier Rouge",
+     "ext": "Plougonvelin"
+    },
+    {
+     "dom": "Porspoder",
+     "ext": "Cavale Blanche"
+    },
+    {
+     "dom": "Locmaria Plouzané",
+     "ext": "Plabennec"
+    },
+    {
+     "dom": "Dirinon",
+     "ext": "Plouguin"
+    },
+    {
+     "dom": "Les Abers",
+     "ext": "Saint Renan Guilers"
+    },
+    {
+     "dom": "Corsen",
+     "ext": "Saint Thonan"
+    },
+    {
+     "dom": "PIHB",
+     "ext": "Le Drennec"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-24",
+   "phase": "aller",
+   "rencontres": [
+    {
+     "dom": "Le Drennec",
+     "ext": "Corsen"
+    },
+    {
+     "dom": "Saint Renan Guilers",
+     "ext": "Dirinon"
+    },
+    {
+     "dom": "Plouguin",
+     "ext": "Locmaria Plouzané"
+    },
+    {
+     "dom": "Cavale Blanche",
+     "ext": "Pilier Rouge"
+    },
+    {
+     "dom": "Plougonvelin",
+     "ext": "PIHB"
+    },
+    {
+     "dom": "Saint Thonan",
+     "ext": "Les Abers"
+    },
+    {
+     "dom": "Plabennec",
+     "ext": "Porspoder"
+    }
+   ]
+  },
+  {
+   "date": "2026-10-01",
+   "phase": "aller",
+   "rencontres": [
+    {
+     "dom": "Porspoder",
+     "ext": "Plouguin"
+    },
+    {
+     "dom": "Locmaria Plouzané",
+     "ext": "Saint Renan Guilers"
+    },
+    {
+     "dom": "Dirinon",
+     "ext": "Saint Thonan"
+    },
+    {
+     "dom": "Plabennec",
+     "ext": "Cavale Blanche"
+    },
+    {
+     "dom": "Les Abers",
+     "ext": "Le Drennec"
+    },
+    {
+     "dom": "Corsen",
+     "ext": "Plougonvelin"
+    },
+    {
+     "dom": "PIHB",
+     "ext": "Pilier Rouge"
+    }
+   ]
+  },
+  {
+   "date": "2026-10-08",
+   "phase": "aller",
+   "rencontres": [
+    {
+     "dom": "Le Drennec",
+     "ext": "Dirinon"
+    },
+    {
+     "dom": "Saint Renan Guilers",
+     "ext": "Porspoder"
+    },
+    {
+     "dom": "Pilier Rouge",
+     "ext": "Corsen"
+    },
+    {
+     "dom": "Plouguin",
+     "ext": "Plabennec"
+    },
+    {
+     "dom": "Cavale Blanche",
+     "ext": "PIHB"
+    },
+    {
+     "dom": "Plougonvelin",
+     "ext": "Les Abers"
+    },
+    {
+     "dom": "Saint Thonan",
+     "ext": "Locmaria Plouzané"
+    }
+   ]
+  },
+  {
+   "date": "2026-10-15",
+   "phase": "aller",
+   "rencontres": [
+    {
+     "dom": "Plouguin",
+     "ext": "Cavale Blanche"
+    },
+    {
+     "dom": "Porspoder",
+     "ext": "Saint Thonan"
+    },
+    {
+     "dom": "Locmaria Plouzané",
+     "ext": "Le Drennec"
+    },
+    {
+     "dom": "Dirinon",
+     "ext": "Plougonvelin"
+    },
+    {
+     "dom": "Plabennec",
+     "ext": "Saint Renan Guilers"
+    },
+    {
+     "dom": "Les Abers",
+     "ext": "Pilier Rouge"
+    },
+    {
+     "dom": "Corsen",
+     "ext": "PIHB"
+    }
+   ]
+  },
+  {
+   "date": "2026-11-05",
+   "phase": "aller",
+   "rencontres": [
+    {
+     "dom": "Le Drennec",
+     "ext": "Porspoder"
+    },
+    {
+     "dom": "Saint Renan Guilers",
+     "ext": "Plouguin"
+    },
+    {
+     "dom": "Pilier Rouge",
+     "ext": "Dirinon"
+    },
+    {
+     "dom": "Cavale Blanche",
+     "ext": "Corsen"
+    },
+    {
+     "dom": "Plougonvelin",
+     "ext": "Locmaria Plouzané"
+    },
+    {
+     "dom": "Saint Thonan",
+     "ext": "Plabennec"
+    },
+    {
+     "dom": "PIHB",
+     "ext": "Les Abers"
+    }
+   ]
+  },
+  {
+   "date": "2026-11-12",
+   "phase": "aller",
+   "rencontres": [
+    {
+     "dom": "Saint Renan Guilers",
+     "ext": "Cavale Blanche"
+    },
+    {
+     "dom": "Plouguin",
+     "ext": "Saint Thonan"
+    },
+    {
+     "dom": "Porspoder",
+     "ext": "Plougonvelin"
+    },
+    {
+     "dom": "Locmaria Plouzané",
+     "ext": "Pilier Rouge"
+    },
+    {
+     "dom": "Dirinon",
+     "ext": "PIHB"
+    },
+    {
+     "dom": "Plabennec",
+     "ext": "Le Drennec"
+    },
+    {
+     "dom": "Les Abers",
+     "ext": "Corsen"
+    }
+   ]
+  },
+  {
+   "date": "2026-11-19",
+   "phase": "aller",
+   "rencontres": [
+    {
+     "dom": "Le Drennec",
+     "ext": "Plouguin"
+    },
+    {
+     "dom": "Pilier Rouge",
+     "ext": "Porspoder"
+    },
+    {
+     "dom": "Cavale Blanche",
+     "ext": "Les Abers"
+    },
+    {
+     "dom": "Plougonvelin",
+     "ext": "Plabennec"
+    },
+    {
+     "dom": "Saint Thonan",
+     "ext": "Saint Renan Guilers"
+    },
+    {
+     "dom": "Corsen",
+     "ext": "Dirinon"
+    },
+    {
+     "dom": "PIHB",
+     "ext": "Locmaria Plouzané"
+    }
+   ]
+  },
+  {
+   "date": "2026-11-26",
+   "phase": "aller",
+   "rencontres": [
+    {
+     "dom": "Saint Renan Guilers",
+     "ext": "Le Drennec"
+    },
+    {
+     "dom": "Plouguin",
+     "ext": "Plougonvelin"
+    },
+    {
+     "dom": "Porspoder",
+     "ext": "PIHB"
+    },
+    {
+     "dom": "Locmaria Plouzané",
+     "ext": "Corsen"
+    },
+    {
+     "dom": "Dirinon",
+     "ext": "Les Abers"
+    },
+    {
+     "dom": "Saint Thonan",
+     "ext": "Cavale Blanche"
+    },
+    {
+     "dom": "Plabennec",
+     "ext": "Pilier Rouge"
+    }
+   ]
+  },
+  {
+   "date": "2026-12-03",
+   "phase": "aller",
+   "rencontres": [
+    {
+     "dom": "Le Drennec",
+     "ext": "Saint Thonan"
+    },
+    {
+     "dom": "Pilier Rouge",
+     "ext": "Plouguin"
+    },
+    {
+     "dom": "Cavale Blanche",
+     "ext": "Dirinon"
+    },
+    {
+     "dom": "Plougonvelin",
+     "ext": "Saint Renan Guilers"
+    },
+    {
+     "dom": "Les Abers",
+     "ext": "Locmaria Plouzané"
+    },
+    {
+     "dom": "Corsen",
+     "ext": "Porspoder"
+    },
+    {
+     "dom": "PIHB",
+     "ext": "Plabennec"
+    }
+   ]
+  },
+  {
+   "date": "2026-12-10",
+   "phase": "aller",
+   "rencontres": [
+    {
+     "dom": "Le Drennec",
+     "ext": "Cavale Blanche"
+    },
+    {
+     "dom": "Saint Renan Guilers",
+     "ext": "Pilier Rouge"
+    },
+    {
+     "dom": "Plouguin",
+     "ext": "PIHB"
+    },
+    {
+     "dom": "Porspoder",
+     "ext": "Les Abers"
+    },
+    {
+     "dom": "Locmaria Plouzané",
+     "ext": "Dirinon"
+    },
+    {
+     "dom": "Saint Thonan",
+     "ext": "Plougonvelin"
+    },
+    {
+     "dom": "Plabennec",
+     "ext": "Corsen"
+    }
+   ]
+  },
+  {
+   "date": "2026-12-17",
+   "phase": "aller",
+   "rencontres": [
+    {
+     "dom": "Pilier Rouge",
+     "ext": "Saint Thonan"
+    },
+    {
+     "dom": "Locmaria Plouzané",
+     "ext": "Cavale Blanche"
+    },
+    {
+     "dom": "Plougonvelin",
+     "ext": "Le Drennec"
+    },
+    {
+     "dom": "Dirinon",
+     "ext": "Porspoder"
+    },
+    {
+     "dom": "Les Abers",
+     "ext": "Plabennec"
+    },
+    {
+     "dom": "Corsen",
+     "ext": "Plouguin"
+    },
+    {
+     "dom": "PIHB",
+     "ext": "Saint Renan Guilers"
+    }
+   ]
+  },
+  {
+   "date": "2027-01-07",
+   "phase": "aller",
+   "rencontres": [
+    {
+     "dom": "Le Drennec",
+     "ext": "Pilier Rouge"
+    },
+    {
+     "dom": "Saint Renan Guilers",
+     "ext": "Corsen"
+    },
+    {
+     "dom": "Plouguin",
+     "ext": "Les Abers"
+    },
+    {
+     "dom": "Porspoder",
+     "ext": "Locmaria Plouzané"
+    },
+    {
+     "dom": "Cavale Blanche",
+     "ext": "Plougonvelin"
+    },
+    {
+     "dom": "Saint Thonan",
+     "ext": "PIHB"
+    },
+    {
+     "dom": "Plabennec",
+     "ext": "Dirinon"
+    }
+   ]
+  },
+  {
+   "date": "2027-01-14",
+   "phase": "retour",
+   "rencontres": [
+    {
+     "dom": "Plougonvelin",
+     "ext": "Pilier Rouge"
+    },
+    {
+     "dom": "Cavale Blanche",
+     "ext": "Porspoder"
+    },
+    {
+     "dom": "Plabennec",
+     "ext": "Locmaria Plouzané"
+    },
+    {
+     "dom": "Plouguin",
+     "ext": "Dirinon"
+    },
+    {
+     "dom": "Saint Renan Guilers",
+     "ext": "Les Abers"
+    },
+    {
+     "dom": "Saint Thonan",
+     "ext": "Corsen"
+    },
+    {
+     "dom": "Le Drennec",
+     "ext": "PIHB"
+    }
+   ]
+  },
+  {
+   "date": "2027-01-21",
+   "phase": "retour",
+   "rencontres": [
+    {
+     "dom": "Corsen",
+     "ext": "Le Drennec"
+    },
+    {
+     "dom": "Dirinon",
+     "ext": "Saint Renan Guilers"
+    },
+    {
+     "dom": "Locmaria Plouzané",
+     "ext": "Plouguin"
+    },
+    {
+     "dom": "Pilier Rouge",
+     "ext": "Cavale Blanche"
+    },
+    {
+     "dom": "PIHB",
+     "ext": "Plougonvelin"
+    },
+    {
+     "dom": "Les Abers",
+     "ext": "Saint Thonan"
+    },
+    {
+     "dom": "Porspoder",
+     "ext": "Plabennec"
+    }
+   ]
+  },
+  {
+   "date": "2027-01-28",
+   "phase": "retour",
+   "rencontres": [
+    {
+     "dom": "Plouguin",
+     "ext": "Porspoder"
+    },
+    {
+     "dom": "Saint Renan Guilers",
+     "ext": "Locmaria Plouzané"
+    },
+    {
+     "dom": "Saint Thonan",
+     "ext": "Dirinon"
+    },
+    {
+     "dom": "Cavale Blanche",
+     "ext": "Plabennec"
+    },
+    {
+     "dom": "Le Drennec",
+     "ext": "Les Abers"
+    },
+    {
+     "dom": "Plougonvelin",
+     "ext": "Corsen"
+    },
+    {
+     "dom": "Pilier Rouge",
+     "ext": "PIHB"
+    }
+   ]
+  },
+  {
+   "date": "2027-02-04",
+   "phase": "retour",
+   "rencontres": [
+    {
+     "dom": "Dirinon",
+     "ext": "Le Drennec"
+    },
+    {
+     "dom": "Porspoder",
+     "ext": "Saint Renan Guilers"
+    },
+    {
+     "dom": "Corsen",
+     "ext": "Pilier Rouge"
+    },
+    {
+     "dom": "Plabennec",
+     "ext": "Plouguin"
+    },
+    {
+     "dom": "PIHB",
+     "ext": "Cavale Blanche"
+    },
+    {
+     "dom": "Les Abers",
+     "ext": "Plougonvelin"
+    },
+    {
+     "dom": "Locmaria Plouzané",
+     "ext": "Saint Thonan"
+    }
+   ]
+  },
+  {
+   "date": "2027-02-11",
+   "phase": "retour",
+   "rencontres": [
+    {
+     "dom": "Cavale Blanche",
+     "ext": "Plouguin"
+    },
+    {
+     "dom": "Saint Thonan",
+     "ext": "Porspoder"
+    },
+    {
+     "dom": "Le Drennec",
+     "ext": "Locmaria Plouzané"
+    },
+    {
+     "dom": "Plougonvelin",
+     "ext": "Dirinon"
+    },
+    {
+     "dom": "Saint Renan Guilers",
+     "ext": "Plabennec"
+    },
+    {
+     "dom": "Pilier Rouge",
+     "ext": "Les Abers"
+    },
+    {
+     "dom": "PIHB",
+     "ext": "Corsen"
+    }
+   ]
+  },
+  {
+   "date": "2027-02-18",
+   "phase": "retour",
+   "rencontres": [
+    {
+     "dom": "Porspoder",
+     "ext": "Le Drennec"
+    },
+    {
+     "dom": "Plouguin",
+     "ext": "Saint Renan Guilers"
+    },
+    {
+     "dom": "Dirinon",
+     "ext": "Pilier Rouge"
+    },
+    {
+     "dom": "Corsen",
+     "ext": "Cavale Blanche"
+    },
+    {
+     "dom": "Locmaria Plouzané",
+     "ext": "Plougonvelin"
+    },
+    {
+     "dom": "Plabennec",
+     "ext": "Saint Thonan"
+    },
+    {
+     "dom": "Les Abers",
+     "ext": "PIHB"
+    }
+   ]
+  },
+  {
+   "date": "2027-03-11",
+   "phase": "retour",
+   "rencontres": [
+    {
+     "dom": "Cavale Blanche",
+     "ext": "Saint Renan Guilers"
+    },
+    {
+     "dom": "Saint Thonan",
+     "ext": "Plouguin"
+    },
+    {
+     "dom": "Plougonvelin",
+     "ext": "Porspoder"
+    },
+    {
+     "dom": "Pilier Rouge",
+     "ext": "Locmaria Plouzané"
+    },
+    {
+     "dom": "PIHB",
+     "ext": "Dirinon"
+    },
+    {
+     "dom": "Le Drennec",
+     "ext": "Plabennec"
+    },
+    {
+     "dom": "Corsen",
+     "ext": "Les Abers"
+    }
+   ]
+  },
+  {
+   "date": "2027-03-18",
+   "phase": "retour",
+   "rencontres": [
+    {
+     "dom": "Plouguin",
+     "ext": "Le Drennec"
+    },
+    {
+     "dom": "Porspoder",
+     "ext": "Pilier Rouge"
+    },
+    {
+     "dom": "Les Abers",
+     "ext": "Cavale Blanche"
+    },
+    {
+     "dom": "Plabennec",
+     "ext": "Plougonvelin"
+    },
+    {
+     "dom": "Saint Renan Guilers",
+     "ext": "Saint Thonan"
+    },
+    {
+     "dom": "Dirinon",
+     "ext": "Corsen"
+    },
+    {
+     "dom": "Locmaria Plouzané",
+     "ext": "PIHB"
+    }
+   ]
+  },
+  {
+   "date": "2027-03-25",
+   "phase": "retour",
+   "rencontres": [
+    {
+     "dom": "Le Drennec",
+     "ext": "Saint Renan Guilers"
+    },
+    {
+     "dom": "Plougonvelin",
+     "ext": "Plouguin"
+    },
+    {
+     "dom": "PIHB",
+     "ext": "Porspoder"
+    },
+    {
+     "dom": "Corsen",
+     "ext": "Locmaria Plouzané"
+    },
+    {
+     "dom": "Les Abers",
+     "ext": "Dirinon"
+    },
+    {
+     "dom": "Cavale Blanche",
+     "ext": "Saint Thonan"
+    },
+    {
+     "dom": "Pilier Rouge",
+     "ext": "Plabennec"
+    }
+   ]
+  },
+  {
+   "date": "2027-04-01",
+   "phase": "retour",
+   "rencontres": [
+    {
+     "dom": "Saint Thonan",
+     "ext": "Le Drennec"
+    },
+    {
+     "dom": "Plouguin",
+     "ext": "Pilier Rouge"
+    },
+    {
+     "dom": "Dirinon",
+     "ext": "Cavale Blanche"
+    },
+    {
+     "dom": "Saint Renan Guilers",
+     "ext": "Plougonvelin"
+    },
+    {
+     "dom": "Locmaria Plouzané",
+     "ext": "Les Abers"
+    },
+    {
+     "dom": "Porspoder",
+     "ext": "Corsen"
+    },
+    {
+     "dom": "Plabennec",
+     "ext": "PIHB"
+    }
+   ]
+  },
+  {
+   "date": "2027-04-08",
+   "phase": "retour",
+   "rencontres": [
+    {
+     "dom": "Cavale Blanche",
+     "ext": "Le Drennec"
+    },
+    {
+     "dom": "Pilier Rouge",
+     "ext": "Saint Renan Guilers"
+    },
+    {
+     "dom": "PIHB",
+     "ext": "Plouguin"
+    },
+    {
+     "dom": "Les Abers",
+     "ext": "Porspoder"
+    },
+    {
+     "dom": "Dirinon",
+     "ext": "Locmaria Plouzané"
+    },
+    {
+     "dom": "Plougonvelin",
+     "ext": "Saint Thonan"
+    },
+    {
+     "dom": "Corsen",
+     "ext": "Plabennec"
+    }
+   ]
+  },
+  {
+   "date": "2027-04-15",
+   "phase": "retour",
+   "rencontres": [
+    {
+     "dom": "Saint Thonan",
+     "ext": "Pilier Rouge"
+    },
+    {
+     "dom": "Cavale Blanche",
+     "ext": "Locmaria Plouzané"
+    },
+    {
+     "dom": "Le Drennec",
+     "ext": "Plougonvelin"
+    },
+    {
+     "dom": "Porspoder",
+     "ext": "Dirinon"
+    },
+    {
+     "dom": "Plabennec",
+     "ext": "Les Abers"
+    },
+    {
+     "dom": "Plouguin",
+     "ext": "Corsen"
+    },
+    {
+     "dom": "Saint Renan Guilers",
+     "ext": "PIHB"
+    }
+   ]
+  },
+  {
+   "date": "2027-05-13",
+   "phase": "retour",
+   "rencontres": [
+    {
+     "dom": "Pilier Rouge",
+     "ext": "Le Drennec"
+    },
+    {
+     "dom": "Corsen",
+     "ext": "Saint Renan Guilers"
+    },
+    {
+     "dom": "Les Abers",
+     "ext": "Plouguin"
+    },
+    {
+     "dom": "Locmaria Plouzané",
+     "ext": "Porspoder"
+    },
+    {
+     "dom": "Plougonvelin",
+     "ext": "Cavale Blanche"
+    },
+    {
+     "dom": "PIHB",
+     "ext": "Saint Thonan"
+    },
+    {
+     "dom": "Dirinon",
+     "ext": "Plabennec"
+    }
+   ]
+  }
+ ],
+ "equipes": {
+  "les-abers": {
+   "nom": "Les Abers",
+   "salle": "Complexe sportif de Mézéozen, Lannilis",
+   "aVerifier": false
+  },
+  "cavale-blanche": {
+   "nom": "Cavale Blanche",
+   "salle": "Centre sportif de la Cavale Blanche, Brest",
+   "aVerifier": true
+  },
+  "corsen": {
+   "nom": "Corsen",
+   "salle": "Salle omnisports de Kerven, Plouarzel",
+   "aVerifier": true
+  },
+  "dirinon": {
+   "nom": "Dirinon",
+   "salle": "Complexe sportif, Dirinon",
+   "aVerifier": true
+  },
+  "le-drennec": {
+   "nom": "Le Drennec",
+   "salle": "Salle du Coat, Le Drennec",
+   "aVerifier": true
+  },
+  "locmaria-plouzane": {
+   "nom": "Locmaria Plouzané",
+   "salle": "Locmaria-Plouzané (salle à préciser)",
+   "aVerifier": true
+  },
+  "pihb": {
+   "nom": "PIHB",
+   "salle": "Plougastel ou Le Relecq-Kerhuon (salle à préciser)",
+   "aVerifier": true
+  },
+  "pilier-rouge": {
+   "nom": "Pilier Rouge",
+   "salle": "Brest (salle à préciser)",
+   "aVerifier": true
+  },
+  "plabennec": {
+   "nom": "Plabennec",
+   "salle": "Salle René Le Bras, Plabennec",
+   "aVerifier": true
+  },
+  "plougonvelin": {
+   "nom": "Plougonvelin",
+   "salle": "Complexe de Trémeur, Plougonvelin",
+   "aVerifier": true
+  },
+  "plouguin": {
+   "nom": "Plouguin",
+   "salle": "Salle omnisports, rue Ernestine de Grisolles, Plouguin",
+   "aVerifier": true
+  },
+  "porspoder": {
+   "nom": "Porspoder",
+   "salle": "Porspoder (salle à préciser)",
+   "aVerifier": true
+  },
+  "saint-renan-guilers": {
+   "nom": "Saint Renan Guilers",
+   "salle": "Salle Louis Ballard, Guilers",
+   "aVerifier": true
+  },
+  "saint-thonan": {
+   "nom": "Saint Thonan",
+   "salle": "Salle omnisports, route de Mestallic, Saint-Thonan",
+   "aVerifier": true
+  }
+ }
+}

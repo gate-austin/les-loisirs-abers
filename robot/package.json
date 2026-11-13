@@ -1,0 +1,8 @@
+{
+  "name": "robot-les-loisirs",
+  "private": true,
+  "description": "Robot des notifications de l'appli Les Loisirs",
+  "dependencies": {
+    "firebase-admin": "^12.7.0"
+  }
+}

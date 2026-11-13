@@ -1,0 +1,98 @@
+{
+  "rules": {
+    "etat": {
+      ".read": true,
+      ".write": "!root.child('etat/initialise').exists() || ((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/admin').val() === true)"
+    },
+    "secret": {
+      ".read": "((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/admin').val() === true)",
+      ".write": "!root.child('etat/initialise').exists() || ((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/admin').val() === true)"
+    },
+    "tentatives": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid",
+        ".validate": "newData.child('equipe').val() === root.child('secret/codeEquipe').val()"
+      }
+    },
+    "liens": {
+      ".read": "((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/admin').val() === true)",
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid",
+        ".validate": "newData.child('equipe').val() === newData.parent().parent().child('secret/codeEquipe').val() && newData.child('code').val() === newData.parent().parent().child('secret/codes/'+newData.child('joueur').val()).val()"
+      }
+    },
+    "joueurs": {
+      ".read": "(auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) || (auth != null && root.child('tentatives/'+auth.uid+'/equipe').val() === root.child('secret/codeEquipe').val())",
+      ".write": "!root.child('etat/initialise').exists() || ((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/admin').val() === true)"
+    },
+    "saison": {
+      ".read": "(auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val())",
+      ".write": "!root.child('etat/initialise').exists() || ((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/admin').val() === true)"
+    },
+    "equipes": {
+      ".read": "(auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val())",
+      ".write": "!root.child('etat/initialise').exists() || (((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/admin').val() === true) || ((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/sondage').val() === true))"
+    },
+    "matchs": {
+      ".read": "(auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val())",
+      ".write": "(((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/admin').val() === true) || ((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/sondage').val() === true))",
+      "$m": {
+        "score": {
+          ".write": "(auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val())"
+        }
+      }
+    },
+    "reponses": {
+      ".read": "(auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val())",
+      ".write": "(((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/admin').val() === true) || ((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/sondage').val() === true))",
+      "$m": {
+        "$j": {
+          ".write": "(auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && $j === root.child('liens/'+auth.uid+'/joueur').val()"
+        }
+      }
+    },
+    "repas": {
+      ".read": "(auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val())",
+      ".write": "(((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/admin').val() === true) || ((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/sondage').val() === true))",
+      "$m": {
+        "cuisinier": {
+          ".write": "(auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && ((!data.exists() && newData.val() === root.child('liens/'+auth.uid+'/joueur').val()) || (data.val() === root.child('liens/'+auth.uid+'/joueur').val() && !newData.exists()))"
+        },
+        "gateaux": {
+          "$j": {
+            ".write": "(auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && $j === root.child('liens/'+auth.uid+'/joueur').val()",
+            ".validate": "newData.parent().numChildren() <= 2"
+          }
+        }
+      }
+    },
+    "cagnotte": {
+      ".read": "(auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val())",
+      ".write": "(((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/admin').val() === true) || ((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/cagnotte').val() === true))"
+    },
+    "tokens": {
+      ".write": "((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/admin').val() === true)",
+      "$j": {
+        "$k": {
+          ".write": "(auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && $j === root.child('liens/'+auth.uid+'/joueur').val()"
+        }
+      }
+    },
+    "notifs": {
+      ".read": "(((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/admin').val() === true) || ((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/sondage').val() === true)) || (((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/admin').val() === true) || ((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/cagnotte').val() === true))",
+      "$n": {
+        ".write": "!data.exists() && newData.exists() && ((((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/admin').val() === true) || ((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/sondage').val() === true)) || (((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/admin').val() === true) || ((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/cagnotte').val() === true)))"
+      }
+    },
+    "rappels": {
+      ".read": "(auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val())",
+      ".write": "((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/admin').val() === true)"
+    },
+    "archives": {
+      ".read": "((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/admin').val() === true)",
+      ".write": "((auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && root.child('joueurs/'+root.child('liens/'+auth.uid+'/joueur').val()+'/roles/admin').val() === true)"
+    }
+  }
+}
