@@ -1,0 +1,50 @@
+name: Robot des notifications
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: robot
+  cancel-in-progress: false
+
+jobs:
+  robot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Installer
+        working-directory: robot
+        run: npm install --omit=dev --no-audit --no-fund
+
+      - name: Envoyer les notifications
+        working-directory: robot
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          DATABASE_URL: https://les-loisirs-abers-default-rtdb.europe-west1.firebasedatabase.app
+        run: |
+          export APP_URL="https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/"
+          node robot.js
+
+      - name: Garder le robot actif (petite trace tous les 30 jours)
+        run: |
+          derniere=$(git log -1 --format=%ct)
+          maintenant=$(date +%s)
+          if [ $((maintenant - derniere)) -gt 2592000 ]; then
+            date -u > robot/activite.txt
+            git config user.name "robot-les-loisirs"
+            git config user.email "robot-les-loisirs@users.noreply.github.com"
+            git add robot/activite.txt
+            git commit -m "Robot : toujours là"
+            git push
+          fi
