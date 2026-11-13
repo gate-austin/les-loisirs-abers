@@ -60,11 +60,11 @@
         "cuisinier": {
           ".write": "(auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && ((!data.exists() && newData.val() === root.child('liens/'+auth.uid+'/joueur').val()) || (data.val() === root.child('liens/'+auth.uid+'/joueur').val() && !newData.exists()))"
         },
-        "gateaux": {
-          "$j": {
-            ".write": "(auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && $j === root.child('liens/'+auth.uid+'/joueur').val()",
-            ".validate": "newData.parent().numChildren() <= 2"
-          }
+        "gateau1": {
+          ".write": "(auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && ((!data.exists() && newData.val() === root.child('liens/'+auth.uid+'/joueur').val()) || (data.val() === root.child('liens/'+auth.uid+'/joueur').val() && !newData.exists()))"
+        },
+        "gateau2": {
+          ".write": "(auth != null && root.child('liens/'+auth.uid+'/code').val() != null && root.child('liens/'+auth.uid+'/code').val() === root.child('secret/codes/'+root.child('liens/'+auth.uid+'/joueur').val()).val()) && ((!data.exists() && newData.val() === root.child('liens/'+auth.uid+'/joueur').val()) || (data.val() === root.child('liens/'+auth.uid+'/joueur').val() && !newData.exists()))"
         }
       }
     },

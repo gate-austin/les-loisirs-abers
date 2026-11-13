@@ -363,7 +363,7 @@ function blocRepas(m, complet) {
   }
   const adv = Number(infoMatch(m.i).adversairesRepas || 0);
   const cuisinier = rp.cuisinier;
-  const gateaux = Object.keys(rp.gateaux || {});
+  const gateaux = [rp.gateau1, rp.gateau2].filter(Boolean);
   const jeFaisGateau = gateaux.includes(S.moiId);
   let h = `<section class="grille2">
     <div class="carte"><div class="pad"><span class="petit">Repas</span><span class="fort">${cuisinier ? esc(nomDe(cuisinier)) : '<span class="ko">Personne pour l\'instant</span>'}</span>
@@ -610,8 +610,12 @@ const actions = {
   repas: (d) => essai(() => set(ref(db, `repas/${d.m}/cuisinier`), S.moiId), 'Merci, tu fais le repas !'),
   'lacher-repas': (d) => essai(() => remove(ref(db, `repas/${d.m}/cuisinier`))),
   gateau: (d) => {
-    const deja = !!(repas(d.m).gateaux || {})[S.moiId];
-    essai(() => (deja ? remove(ref(db, `repas/${d.m}/gateaux/${S.moiId}`)) : set(ref(db, `repas/${d.m}/gateaux/${S.moiId}`), true)), deja ? null : 'Merci pour le gâteau !');
+    const rp = repas(d.m);
+    const maPlace = ['gateau1', 'gateau2'].find((p) => rp[p] === S.moiId);
+    if (maPlace) return essai(() => remove(ref(db, `repas/${d.m}/${maPlace}`)));
+    const libre = ['gateau1', 'gateau2'].find((p) => !rp[p]);
+    if (!libre) return toast('Les deux gâteaux sont déjà pris.');
+    essai(() => set(ref(db, `repas/${d.m}/${libre}`), S.moiId), 'Merci pour le gâteau !');
   },
   'ouvrir-sondage': (d) => {
     const m = matchParId(d.m);
