@@ -67,32 +67,44 @@ async function notificationsEnAttente() {
   }
 }
 
-async function rappelDuMardi() {
+// Rappel à 20 h, deux jours avant chaque match (le mardi pour les matchs du jeudi).
+const JOURS = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+async function rappels() {
   const p = heureDeParis();
-  if (p.jour !== 'Tuesday' || p.heure < 20) return;
-  const jeudi = plusJours(p.date, 2);
+  if (p.heure < 20) return;
+  const cible2j = plusJours(p.date, 2);
   const saison = (await db.ref('saison').get()).val() || {};
   const nous = (saison.meta && saison.meta.equipe) || 'Les Abers';
+  const matchs = [];
   const journees = saison.journees || [];
-  const idx = Object.keys(journees).find((k) => journees[k].date === jeudi && Object.values(journees[k].rencontres || {}).some((r) => r.dom === nous || r.ext === nous));
-  if (idx === undefined) return;
-  if ((await db.ref(`rappels/${idx}`).get()).exists()) return;
-  const rencontre = Object.values(journees[idx].rencontres).find((r) => r.dom === nous || r.ext === nous);
+  Object.keys(journees).forEach((k) => {
+    const r = Object.values(journees[k].rencontres || {}).find((x) => x.dom === nous || x.ext === nous);
+    if (r && journees[k].date === cible2j) matchs.push({ id: k, titre: `${r.dom} – ${r.ext}`, amical: false });
+  });
+  const amicaux = (await db.ref('amicaux').get()).val() || {};
+  Object.entries(amicaux).forEach(([id, a]) => {
+    if (a && a.date === cible2j) matchs.push({ id, titre: a.domicile ? `${nous} – ${a.adversaire}` : `${a.adversaire} – ${nous}`, amical: true });
+  });
+  if (!matchs.length) return;
   const joueurs = (await db.ref('joueurs').get()).val() || {};
-  const rep = (await db.ref(`reponses/${idx}`).get()).val() || {};
-  const cible = {};
-  Object.keys(joueurs).forEach((j) => { if (!rep[j] || rep[j].dispo === undefined) cible[j] = true; });
-  if (Object.keys(cible).length) {
-    const nb = await envoyer('Rappel : match jeudi', `Tu n'as pas encore répondu pour ${rencontre.dom} – ${rencontre.ext}. Dispo ? Tu restes manger ?`, cible);
-    console.log(`Rappel du mardi envoyé à ${nb} appareil(s).`);
+  const jour = JOURS[new Date(`${cible2j}T12:00:00Z`).getUTCDay()];
+  for (const m of matchs) {
+    if ((await db.ref(`rappels/${m.id}`).get()).exists()) continue;
+    const rep = (await db.ref(`reponses/${m.id}`).get()).val() || {};
+    const cible = {};
+    Object.keys(joueurs).forEach((j) => { if (!rep[j] || rep[j].dispo === undefined) cible[j] = true; });
+    if (Object.keys(cible).length) {
+      const nb = await envoyer(`Rappel : ${m.amical ? 'match amical' : 'match'} ${jour}`, `Tu n'as pas encore répondu pour ${m.titre}. Dispo ? Tu restes manger ?`, cible);
+      console.log(`Rappel envoyé à ${nb} appareil(s) pour ${m.titre}.`);
+    }
+    await db.ref(`rappels/${m.id}`).set(Date.now());
   }
-  await db.ref(`rappels/${idx}`).set(Date.now());
 }
 
 (async () => {
   try {
     await notificationsEnAttente();
-    await rappelDuMardi();
+    await rappels();
   } catch (e) {
     console.error(e);
     process.exitCode = 1;

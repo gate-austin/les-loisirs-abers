@@ -97,9 +97,16 @@ function nosMatchs() {
     const r = j.rencontres.find((x) => x.dom === n || x.ext === n);
     if (r) out.push({ i: j.i, date: j.date, phase: j.phase, dom: r.dom === n, recoit: r.dom, visiteur: r.ext, adversaire: r.dom === n ? r.ext : r.dom });
   }
-  return out;
+  for (const [id, a] of Object.entries(D('amicaux'))) {
+    if (!a || !a.date) continue;
+    out.push({ i: id, amical: true, date: a.date, phase: 'amical', dom: !!a.domicile, recoit: a.domicile ? n : a.adversaire, visiteur: a.domicile ? a.adversaire : n, adversaire: a.adversaire });
+  }
+  return out.sort((a, b) => a.date.localeCompare(b.date));
 }
-const matchParId = (i) => nosMatchs().find((m) => m.i === Number(i));
+const matchParId = (i) => nosMatchs().find((m) => String(m.i) === String(i));
+const badgeMatch = (m, court) => (m.amical
+  ? `<span class="badge amical">${court ? 'Amical' : `Amical · ${m.dom ? 'domicile' : 'extérieur'}`}</span>`
+  : `<span class="badge ${m.dom ? 'dom' : 'ext'}">${m.dom ? (court ? 'Dom.' : 'Domicile') : (court ? 'Ext.' : 'Extérieur')}</span>`);
 const prochainMatch = () => nosMatchs().find((m) => m.date >= aujourdhui());
 const dernierMatch = () => [...nosMatchs()].reverse().find((m) => m.date < aujourdhui());
 const infoMatch = (i) => D('matchs')[i] || {};
@@ -160,7 +167,7 @@ async function demarrer() {
 
 function abonner() {
   S.abonnements.forEach((u) => u()); S.abonnements = [];
-  const chemins = ['joueurs', 'saison', 'matchs', 'reponses', 'repas', 'cagnotte', 'equipes'];
+  const chemins = ['joueurs', 'saison', 'amicaux', 'matchs', 'reponses', 'repas', 'cagnotte', 'equipes'];
   for (const c of chemins) {
     S.abonnements.push(onValue(ref(db, c), (snap) => {
       S.data[c] = snap.val() || {};
@@ -336,7 +343,7 @@ function vueCompte() {
 function enTeteMatch(m) {
   const lieu = lieuMatch(m);
   return `<div class="pad">
-    <div class="ligne-haut"><span class="petit">${capital(dateLongue(m.date))} · ${heureMatch(m)}</span><span class="badge ${m.dom ? 'dom' : 'ext'}">${m.dom ? 'Domicile' : 'Extérieur'}</span></div>
+    <div class="ligne-haut"><span class="petit">${capital(dateLongue(m.date))} · ${heureMatch(m)}</span>${badgeMatch(m, false)}</div>
     <span class="affiche">${esc(m.recoit)} – ${esc(m.visiteur)}</span>
     <span class="petit">${esc(lieu)}</span>
     <a href="${lienGps(lieu)}" target="_blank" rel="noopener" class="fort" style="display:flex;align-items:center;gap:6px;font-size:14px">${ico('salles', 18)}Y aller (GPS)</a>
@@ -405,7 +412,8 @@ function zoneSondage(m) {
     <div class="champ"><label for="f-l" style="font-weight:400">Lieu</label><input id="f-l" name="lieu" value="${esc(info.lieu || salleDe(m.recoit))}"></div>
     ${m.dom ? `<div class="ligne-champ"><label for="f-a">Adversaires qui restent manger</label><input id="f-a" name="adversaires" inputmode="numeric" value="${esc(info.adversairesRepas ?? '')}"></div>` : ''}
     <button class="btn" type="submit">Enregistrer</button>
-    <span class="petit">Rappel automatique le mardi soir à 20 h pour ceux qui n'ont pas répondu.</span>
+    <span class="petit">Rappel automatique à 20 h, deux jours avant le match, pour ceux qui n'ont pas répondu.</span>
+    ${m.amical ? `<button type="button" class="btn danger" data-action="supprimer-amical" data-m="${m.i}">Supprimer ce match amical</button>` : ''}
   </form>`;
 }
 function blocScore(m, avecTitre) {
@@ -428,8 +436,11 @@ function vueMatchs() {
   const p = prochainMatch();
   const phase = S.ui.phase || (p ? p.phase : 'aller');
   const liste = tous.filter((m) => m.phase === phase);
+  const bouton = (v, l) => `<button class="btn ${phase === v ? '' : 'neutre'}" data-action="phase" data-v="${v}" style="padding:0 6px">${l}</button>`;
   return `<h1 class="page">Nos matchs</h1>
-  <div class="grille2"><button class="btn ${phase === 'aller' ? '' : 'neutre'}" data-action="phase" data-v="aller">Aller</button><button class="btn ${phase === 'retour' ? '' : 'neutre'}" data-action="phase" data-v="retour">Retour</button></div>
+  <div class="grille3">${bouton('aller', 'Aller')}${bouton('retour', 'Retour')}${bouton('amical', 'Amicaux')}</div>
+  ${phase === 'amical' && peut('sondage') ? (S.ui.ajoutAmical ? formAmical() : `<button class="btn sec" data-action="ajout-amical">+ Ajouter un match amical</button>`) : ''}
+  ${phase === 'amical' && !liste.length ? '<p class="petit" style="text-align:center">Aucun match amical prévu pour l\'instant.</p>' : ''}
   ${liste.map((m) => {
     const d = dateObj(m.date);
     const sc = infoMatch(m.i).score;
@@ -437,8 +448,20 @@ function vueMatchs() {
     const info = etat === 'prochain' ? 'Prochain match' : (sc && sc.nous !== undefined ? `Score : ${esc(sc.nous)} – ${esc(sc.eux)}` : (m.date < aujourdhui() ? 'Score à saisir' : heureMatch(m)));
     return `<a class="match-ligne ${etat}" href="#match/${m.i}"><div class="jour"><b>${d.getDate()}</b><span>${MOIS_COURT[d.getMonth()]}</span></div>
       <div style="flex:1;min-width:0;display:flex;flex-direction:column"><span class="fort">${esc(m.recoit)} – ${esc(m.visiteur)}</span><span class="petit">${info}</span></div>
-      <span class="badge ${m.dom ? 'dom' : 'ext'}">${m.dom ? 'Dom.' : 'Ext.'}</span></a>`;
+      ${m.amical ? `<span class="badge ${m.dom ? 'dom' : 'ext'}">${m.dom ? 'Dom.' : 'Ext.'}</span>` : badgeMatch(m, true)}</a>`;
   }).join('')}`;
+}
+function formAmical() {
+  const equipes = [...new Set(journees().flatMap((j) => j.rencontres.flatMap((r) => [r.dom, r.ext])))].filter((e) => e !== nous()).sort((a, b) => a.localeCompare(b, 'fr'));
+  return `<form class="zone" data-form="amical"><span class="etiquette">Nouveau match amical</span>
+    <div class="champ"><label for="am-d" style="font-weight:400">Date</label><input id="am-d" type="date" name="date" required min="${aujourdhui()}"></div>
+    <div class="ligne-champ"><label for="am-h">Heure du RDV</label><input id="am-h" type="time" name="heure" value="${esc(meta().rdvDefaut || '20:15')}"></div>
+    <div class="champ"><label for="am-a" style="font-weight:400">Équipe adverse</label><input id="am-a" name="adversaire" required list="am-liste" placeholder="Choisis ou tape un nom"><datalist id="am-liste">${equipes.map((e) => `<option value="${esc(e)}"></option>`).join('')}</datalist></div>
+    <div class="champ"><label for="am-o" style="font-weight:400">Où se joue le match ?</label><select id="am-o" name="ou"><option value="dom">Chez nous</option><option value="ext">Chez l'adversaire</option></select></div>
+    <div class="champ"><label for="am-l" style="font-weight:400">Salle et adresse (facultatif)</label><input id="am-l" name="lieu" placeholder="Vide = salle habituelle de l'équipe qui reçoit"></div>
+    <div class="grille2"><button type="button" class="btn neutre" data-action="annuler-amical">Annuler</button><button class="btn" type="submit">Ajouter</button></div>
+    <label class="case"><input type="checkbox" name="notifier" checked style="width:22px;height:22px;accent-color:var(--bleu)">Lancer le sondage tout de suite (notifie tout le monde)</label>
+  </form>`;
 }
 function vueMatch(i) {
   const m = matchParId(i);
@@ -637,7 +660,7 @@ const actions = {
     const m = matchParId(d.m);
     essai(async () => {
       await update(ref(db, `matchs/${m.i}`), { sondageOuvert: true });
-      await envoyerNotif(`Sondage : ${dateLongue(m.date)}`, `${m.recoit} – ${m.visiteur} (${m.dom ? 'domicile' : 'extérieur'}). Tu es dispo ? Tu restes manger ?`);
+      await envoyerNotif(`${m.amical ? 'Match amical' : 'Sondage'} : ${dateLongue(m.date)}`, `${m.recoit} – ${m.visiteur} (${m.dom ? 'domicile' : 'extérieur'}). Tu es dispo ? Tu restes manger ?`);
     }, 'Sondage lancé, notification en route');
   },
   relancer: (d) => {
@@ -648,7 +671,17 @@ const actions = {
     if (!Object.keys(cible).length) return toast('Tout le monde a répondu 👍');
     essai(() => envoyerNotif(`Rappel : ${dateLongue(m.date)}`, `Tu n'as pas encore répondu pour ${m.recoit} – ${m.visiteur}.`, cible), `Relance envoyée à ${Object.keys(cible).length} joueur(s)`);
   },
-  phase: (d) => { S.ui.phase = d.v; rendre(); },
+  phase: (d) => { S.ui.phase = d.v; S.ui.ajoutAmical = false; rendre(); },
+  'ajout-amical': () => { S.ui.ajoutAmical = true; rendre(); },
+  'annuler-amical': () => { S.ui.ajoutAmical = false; rendre(); },
+  'supprimer-amical': (d) => {
+    const m = matchParId(d.m);
+    if (!m || !confirm(`Supprimer le match amical contre ${m.adversaire} ?`)) return;
+    essai(async () => {
+      await update(ref(db), { [`amicaux/${d.m}`]: null, [`matchs/${d.m}`]: null, [`reponses/${d.m}`]: null, [`repas/${d.m}`]: null });
+      location.hash = '#matchs';
+    }, 'Match amical supprimé');
+  },
   journee: (d) => { S.ui.journee += Number(d.v); rendre(); },
   recu: (d) => { const deja = aRecu(d.c, d.j); essai(() => (deja ? remove(ref(db, `cagnotte/recus/${d.c}/${d.j}`)) : set(ref(db, `cagnotte/recus/${d.c}/${d.j}`), true))); },
   cloturer: (d) => { if (confirm('Clôturer cette cagnotte ?')) essai(() => update(ref(db, `cagnotte/collectes/${d.c}`), { active: false })); },
@@ -772,6 +805,25 @@ const formulaires = {
       await update(ref(db), { [`joueurs/${jid}/nom`]: v.nom.trim(), [`joueurs/${jid}/roles`]: Object.keys(roles).length ? roles : null, [`secret/codes/${jid}`]: v.code.trim() });
       S.ui.editJoueur = null; S.ui.ajoutJoueur = false;
     }, 'Joueur enregistré');
+  },
+  async amical(f) {
+    const v = Object.fromEntries(new FormData(f));
+    const adversaire = v.adversaire.trim();
+    if (!v.date || !adversaire) return toast('Indique la date et l\'équipe adverse.');
+    const domicile = v.ou === 'dom';
+    const id = push(ref(db, 'amicaux')).key;
+    await essai(async () => {
+      await update(ref(db), {
+        [`amicaux/${id}`]: { date: v.date, adversaire, domicile, cree: Date.now(), par: S.moiId },
+        [`matchs/${id}`]: { heure: v.heure || null, lieu: (v.lieu || '').trim() || null, sondageOuvert: !!v.notifier },
+      });
+      if (v.notifier) {
+        const recoit = domicile ? nous() : adversaire, visiteur = domicile ? adversaire : nous();
+        await envoyerNotif(`Match amical : ${dateLongue(v.date)}`, `${recoit} – ${visiteur} (${domicile ? 'domicile' : 'extérieur'}). Tu es dispo ? Tu restes manger ?`);
+      }
+      S.ui.ajoutAmical = false;
+      S.ui.phase = 'amical';
+    }, v.notifier ? 'Match amical ajouté, notification en route' : 'Match amical ajouté');
   },
   async 'mon-code'(f) {
     const v = Object.fromEntries(new FormData(f));
