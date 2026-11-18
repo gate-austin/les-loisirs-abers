@@ -107,7 +107,7 @@ const matchParId = (i) => nosMatchs().find((m) => String(m.i) === String(i));
 const badgeMatch = (m, court) => (m.amical
   ? `<span class="badge amical">${court ? 'Amical' : `Amical · ${m.dom ? 'domicile' : 'extérieur'}`}</span>`
   : `<span class="badge ${m.dom ? 'dom' : 'ext'}">${m.dom ? (court ? 'Dom.' : 'Domicile') : (court ? 'Ext.' : 'Extérieur')}</span>`);
-const prochainMatch = () => nosMatchs().find((m) => m.date >= aujourdhui());
+const prochainMatch = () => nosMatchs().find((m) => m.date >= aujourdhui() && !infoMatch(m.i).annule);
 const dernierMatch = () => [...nosMatchs()].reverse().find((m) => m.date < aujourdhui());
 const infoMatch = (i) => D('matchs')[i] || {};
 const salleDe = (nomEquipe) => (D('equipes')[slug(nomEquipe)] || {}).salle || '';
@@ -119,11 +119,11 @@ const repas = (i) => D('repas')[i] || {};
 
 function bilan(i) {
   const rep = reponses(i);
-  const b = { dispo: [], pasDispo: [], sansReponse: [], mange: [], mangePas: [] };
+  const b = { dispo: [], pasDispo: [], sansReponse: [], mange: [], mangePas: [], invites: 0 };
   for (const j of joueursTries()) {
     const r = rep[j.id];
     if (!r || r.dispo === undefined) b.sansReponse.push(j.nom);
-    else if (r.dispo) b.dispo.push(j.nom); else b.pasDispo.push(j.nom);
+    else if (r.dispo) { const p = Number(r.plus || 0); b.invites += p; b.dispo.push(p ? `${j.nom} (+${p})` : j.nom); } else b.pasDispo.push(j.nom);
     if (r && r.mange) b.mange.push(j.nom); else if (r && r.dispo !== undefined) b.mangePas.push(j.nom);
   }
   return b;
@@ -353,6 +353,17 @@ function carteMatch(m, complet) {
   const r = reponses(m.i)[S.moiId] || {};
   const b = bilan(m.i);
   const ouvert = S.ui.noms[m.i];
+  if (infoMatch(m.i).annule) {
+    let a = `<section class="carte">${enTeteMatch(m)}<div class="pad" style="background:#FDECEA"><span class="ko" style="font-size:17px">Match annulé</span><span class="petit">Pas besoin de répondre.</span></div></section>`;
+    if (complet && peut('sondage')) a += zoneSondage(m);
+    if (!complet) a += `<a class="btn neutre" href="#match/${m.i}">Détail du match</a>`;
+    return a;
+  }
+  const plusUn = r.dispo === true
+    ? `<div class="ligne-haut" style="min-height:44px"><span style="font-size:15px">J'amène quelqu'un${r.plus ? ` : <b>+${r.plus}</b>` : ''}</span><span style="display:flex;gap:6px">
+        <button class="btn neutre" style="width:44px;padding:0" data-action="plus" data-m="${m.i}" data-v="-1" aria-label="Retirer un invité" ${r.plus ? '' : 'disabled'}>−</button>
+        <button class="btn sec" style="width:44px;padding:0" data-action="plus" data-m="${m.i}" data-v="1" aria-label="Ajouter un invité">+1</button></span></div>`
+    : '<span class="petit">Réponds « Dispo » pour pouvoir ajouter un +1 (un enfant, un ami…).</span>';
   let h = `<section class="carte">${enTeteMatch(m)}
     <div class="pad gris">
       <span class="fort" style="font-size:14px">Ta réponse${infoMatch(m.i).sondageOuvert ? '' : ' <span class="petit">(sondage pas encore lancé)</span>'}</span>
@@ -360,16 +371,17 @@ function carteMatch(m, complet) {
         <button class="btn ${r.dispo === true ? '' : 'neutre'}" data-action="repondre" data-m="${m.i}" data-v="1">${r.dispo === true ? ico('coche', 18) : ''}Dispo</button>
         <button class="btn ${r.dispo === false ? '' : 'neutre'}" data-action="repondre" data-m="${m.i}" data-v="0">${r.dispo === false ? ico('coche', 18) : ''}Pas dispo</button>
       </div>
-      <button class="case" data-action="manger" data-m="${m.i}"><span class="boite ${r.mange ? 'on' : ''}">${r.mange ? ico('coche', 16) : ''}</span>Je reste manger après le match</button>
+      ${m.amical ? plusUn : `<button class="case" data-action="manger" data-m="${m.i}"><span class="boite ${r.mange ? 'on' : ''}">${r.mange ? ico('coche', 16) : ''}</span>Je reste manger après le match</button>`}
     </div></section>
   <section class="grille3">
-    <div class="stat"><b style="color:var(--bleu)">${b.dispo.length}</b><span>dispos</span></div>
+    <div class="stat"><b style="color:var(--bleu)">${b.dispo.length}${b.invites ? ` <span style="font-size:18px">+${b.invites}</span>` : ''}</b><span>${b.invites ? 'dispos + invités' : 'dispos'}</span></div>
     <div class="stat"><b>${b.pasDispo.length}</b><span>pas dispo</span></div>
     <div class="stat"><b style="color:var(--rouge)">${b.sansReponse.length}</b><span>sans réponse</span></div>
   </section>
   <button class="btn sec" data-action="noms" data-m="${m.i}">${ico('gens', 18)}${ouvert ? 'Masquer les noms' : 'Voir les noms'}</button>`;
   if (ouvert) {
-    const g = [['Dispo', b.dispo, 'ok'], ['Pas dispo', b.pasDispo, ''], ['Sans réponse', b.sansReponse, 'ko'], ['Restent manger', b.mange, ''], ['Ne restent pas manger', b.mangePas, '']];
+    const g = [['Dispo', b.dispo, 'ok'], ['Pas dispo', b.pasDispo, ''], ['Sans réponse', b.sansReponse, 'ko']];
+    if (!m.amical) g.push(['Restent manger', b.mange, ''], ['Ne restent pas manger', b.mangePas, '']);
     h += `<section class="carte liste">${g.map(([t, l, c]) => `<div class="el"><div class="grow"><span class="${c} petit" style="text-transform:uppercase;letter-spacing:.05em;font-weight:600">${t} (${l.length})</span><span>${l.length ? l.map(esc).join(', ') : '—'}</span></div></div>`).join('')}</section>`;
   }
   h += blocRepas(m, complet);
@@ -379,6 +391,7 @@ function carteMatch(m, complet) {
   return h;
 }
 function blocRepas(m, complet) {
+  if (m.amical) return '';
   const b = bilan(m.i);
   const rp = repas(m.i);
   if (!m.dom) {
@@ -406,14 +419,17 @@ function zoneSondage(m) {
   const info = infoMatch(m.i);
   return `<form class="zone" data-form="match" data-m="${m.i}">
     <span class="etiquette">Olivier / Arnaud</span>
-    ${info.sondageOuvert ? `<span class="ok">${ico('coche', 16)} Sondage lancé</span>` : `<button type="button" class="btn" data-action="ouvrir-sondage" data-m="${m.i}">${ico('cloche', 18)}Lancer le sondage (notifie tout le monde)</button>`}
-    <button type="button" class="btn sec" data-action="relancer" data-m="${m.i}">Relancer ceux qui n'ont pas répondu</button>
+    ${info.annule ? '' : `${info.sondageOuvert ? `<span class="ok">${ico('coche', 16)} Sondage lancé</span>` : `<button type="button" class="btn" data-action="ouvrir-sondage" data-m="${m.i}">${ico('cloche', 18)}Lancer le sondage (notifie tout le monde)</button>`}
+    <button type="button" class="btn sec" data-action="relancer" data-m="${m.i}">Relancer ceux qui n'ont pas répondu</button>`}
     <div class="ligne-champ"><label for="f-h">Heure du RDV</label><input id="f-h" type="time" name="heure" value="${esc(info.heure || (m.dom ? meta().rdvDefaut || '' : ''))}"></div>
     <div class="champ"><label for="f-l" style="font-weight:400">Lieu</label><input id="f-l" name="lieu" value="${esc(info.lieu || salleDe(m.recoit))}"></div>
-    ${m.dom ? `<div class="ligne-champ"><label for="f-a">Adversaires qui restent manger</label><input id="f-a" name="adversaires" inputmode="numeric" value="${esc(info.adversairesRepas ?? '')}"></div>` : ''}
+    ${m.dom && !m.amical ? `<div class="ligne-champ"><label for="f-a">Adversaires qui restent manger</label><input id="f-a" name="adversaires" inputmode="numeric" value="${esc(info.adversairesRepas ?? '')}"></div>` : ''}
     <button class="btn" type="submit">Enregistrer</button>
     <span class="petit">Rappel automatique à 20 h, deux jours avant le match, pour ceux qui n'ont pas répondu.</span>
-    ${m.amical ? `<button type="button" class="btn danger" data-action="supprimer-amical" data-m="${m.i}">Supprimer ce match amical</button>` : ''}
+    ${m.amical ? (info.annule
+      ? `<button type="button" class="btn sec" data-action="retablir-match" data-m="${m.i}">Rétablir le match (il a finalement lieu)</button>`
+      : `<button type="button" class="btn danger" data-action="annuler-match" data-m="${m.i}">Annuler le match (pas assez de monde)</button>`) : ''}
+    ${m.amical ? `<button type="button" class="btn neutre" data-action="supprimer-amical" data-m="${m.i}">Supprimer complètement ce match amical</button>` : ''}
   </form>`;
 }
 function blocScore(m, avecTitre) {
@@ -444,8 +460,9 @@ function vueMatchs() {
   ${liste.map((m) => {
     const d = dateObj(m.date);
     const sc = infoMatch(m.i).score;
-    const etat = p && p.i === m.i ? 'prochain' : (m.date < aujourdhui() ? 'passe' : '');
-    const info = etat === 'prochain' ? 'Prochain match' : (sc && sc.nous !== undefined ? `Score : ${esc(sc.nous)} – ${esc(sc.eux)}` : (m.date < aujourdhui() ? 'Score à saisir' : heureMatch(m)));
+    const annule = !!infoMatch(m.i).annule;
+    const etat = p && p.i === m.i ? 'prochain' : (m.date < aujourdhui() || annule ? 'passe' : '');
+    const info = annule ? '<span class="ko">Annulé</span>' : etat === 'prochain' ? 'Prochain match' : (sc && sc.nous !== undefined ? `Score : ${esc(sc.nous)} – ${esc(sc.eux)}` : (m.date < aujourdhui() ? 'Score à saisir' : heureMatch(m)));
     return `<a class="match-ligne ${etat}" href="#match/${m.i}"><div class="jour"><b>${d.getDate()}</b><span>${MOIS_COURT[d.getMonth()]}</span></div>
       <div style="flex:1;min-width:0;display:flex;flex-direction:column"><span class="fort">${esc(m.recoit)} – ${esc(m.visiteur)}</span><span class="petit">${info}</span></div>
       ${m.amical ? `<span class="badge ${m.dom ? 'dom' : 'ext'}">${m.dom ? 'Dom.' : 'Ext.'}</span>` : badgeMatch(m, true)}</a>`;
@@ -643,7 +660,27 @@ async function lirePlanningPdf(fichier) {
 // ---------------------------------------------------------------------
 const actions = {
   notifs: () => activerNotifs(),
-  repondre: (d) => essai(() => update(ref(db, `reponses/${d.m}/${S.moiId}`), { dispo: d.v === '1' })),
+  repondre: (d) => essai(() => update(ref(db, `reponses/${d.m}/${S.moiId}`), d.v === '1' ? { dispo: true } : { dispo: false, plus: null })),
+  plus: (d) => {
+    const r = reponses(d.m)[S.moiId] || {};
+    const n = Math.max(0, Math.min(5, Number(r.plus || 0) + Number(d.v)));
+    essai(() => update(ref(db, `reponses/${d.m}/${S.moiId}`), { plus: n || null }));
+  },
+  'annuler-match': (d) => {
+    const m = matchParId(d.m);
+    if (!confirm(`Annuler le match contre ${m.adversaire} du ${dateLongue(m.date)} ? Tout le monde sera prévenu.`)) return;
+    essai(async () => {
+      await update(ref(db, `matchs/${m.i}`), { annule: true });
+      await envoyerNotif(`Match annulé : ${dateLongue(m.date)}`, `${m.recoit} – ${m.visiteur} n'aura pas lieu.`);
+    }, 'Match annulé, tout le monde est prévenu');
+  },
+  'retablir-match': (d) => {
+    const m = matchParId(d.m);
+    essai(async () => {
+      await update(ref(db, `matchs/${m.i}`), { annule: null });
+      await envoyerNotif(`Match maintenu : ${dateLongue(m.date)}`, `Finalement, ${m.recoit} – ${m.visiteur} a bien lieu !`);
+    }, 'Match rétabli, tout le monde est prévenu');
+  },
   manger: (d) => { const r = reponses(d.m)[S.moiId] || {}; essai(() => update(ref(db, `reponses/${d.m}/${S.moiId}`), { mange: !r.mange })); },
   noms: (d) => { S.ui.noms[d.m] = !S.ui.noms[d.m]; rendre(); },
   repas: (d) => essai(() => set(ref(db, `repas/${d.m}/cuisinier`), S.moiId), 'Merci, tu fais le repas !'),
@@ -660,7 +697,7 @@ const actions = {
     const m = matchParId(d.m);
     essai(async () => {
       await update(ref(db, `matchs/${m.i}`), { sondageOuvert: true });
-      await envoyerNotif(`${m.amical ? 'Match amical' : 'Sondage'} : ${dateLongue(m.date)}`, `${m.recoit} – ${m.visiteur} (${m.dom ? 'domicile' : 'extérieur'}). Tu es dispo ? Tu restes manger ?`);
+      await envoyerNotif(`${m.amical ? 'Match amical' : 'Sondage'} : ${dateLongue(m.date)}`, `${m.recoit} – ${m.visiteur} (${m.dom ? 'domicile' : 'extérieur'}). ${m.amical ? 'Tu es dispo ? (+1 possible)' : 'Tu es dispo ? Tu restes manger ?'}`);
     }, 'Sondage lancé, notification en route');
   },
   relancer: (d) => {
@@ -819,7 +856,7 @@ const formulaires = {
       });
       if (v.notifier) {
         const recoit = domicile ? nous() : adversaire, visiteur = domicile ? adversaire : nous();
-        await envoyerNotif(`Match amical : ${dateLongue(v.date)}`, `${recoit} – ${visiteur} (${domicile ? 'domicile' : 'extérieur'}). Tu es dispo ? Tu restes manger ?`);
+        await envoyerNotif(`Match amical : ${dateLongue(v.date)}`, `${recoit} – ${visiteur} (${domicile ? 'domicile' : 'extérieur'}). Tu es dispo ? (+1 possible)`);
       }
       S.ui.ajoutAmical = false;
       S.ui.phase = 'amical';

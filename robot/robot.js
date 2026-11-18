@@ -90,11 +90,12 @@ async function rappels() {
   const jour = JOURS[new Date(`${cible2j}T12:00:00Z`).getUTCDay()];
   for (const m of matchs) {
     if ((await db.ref(`rappels/${m.id}`).get()).exists()) continue;
+    if ((await db.ref(`matchs/${m.id}/annule`).get()).val() === true) continue;
     const rep = (await db.ref(`reponses/${m.id}`).get()).val() || {};
     const cible = {};
     Object.keys(joueurs).forEach((j) => { if (!rep[j] || rep[j].dispo === undefined) cible[j] = true; });
     if (Object.keys(cible).length) {
-      const nb = await envoyer(`Rappel : ${m.amical ? 'match amical' : 'match'} ${jour}`, `Tu n'as pas encore répondu pour ${m.titre}. Dispo ? Tu restes manger ?`, cible);
+      const nb = await envoyer(`Rappel : ${m.amical ? 'match amical' : 'match'} ${jour}`, `Tu n'as pas encore répondu pour ${m.titre}. ${m.amical ? 'Dispo ? (+1 possible)' : 'Dispo ? Tu restes manger ?'}`, cible);
       console.log(`Rappel envoyé à ${nb} appareil(s) pour ${m.titre}.`);
     }
     await db.ref(`rappels/${m.id}`).set(Date.now());
